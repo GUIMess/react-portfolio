@@ -6,12 +6,10 @@ export default function About() {
                     <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">
                         Hi, I'm Catalin.
                         <br className="hidden lg:inline-block" />I love to build amazing
-                        apps.
+                        web experiences.
                     </h1>
                     <p className="mb-8 leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui
-                        laborum quasi, incidunt dolore iste nostrum cupiditate voluptas?
-                        Laborum, voluptas natus?
+                        I'm a web developer based in Wichita, KS. I have a passion for building beautiful, intuitive, and functional websites. I specialize in building (and occasionally designing) exceptional websites, applications, and everything in between.
                     </p>
                     <div className="flex justify-center">
                         <a

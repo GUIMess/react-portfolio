@@ -12,9 +12,7 @@ export default function Projects() {
                         Apps I've Built
                     </h1>
                     <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo
-                        facilis repellat ab cupiditate alias vero aliquid obcaecati quisquam
-                        fuga dolore.
+                       This is a list of apps I've built. I've built them using Full-Stack Javasctript, EJS, Bootstrap and Tailwind CSS. I've also used MongoDB for database storage. 
                     </p>
                 </div>
                 <div className="flex flex-wrap -m-4">
