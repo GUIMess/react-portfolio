@@ -1,17 +1,17 @@
 export const projects = [
   {
     title: "Bubbas Recipes",
-    subtitle: "MEEN Stack",
+    subtitle: "MERN Stack",
     description:
-      "Share your recipes with the world! This app was built using the MERN stack. It uses MongoDB and Cloudinary for database storage, Express for the server, EJS for the front-end and Node.js for the back-end. It also uses Bootstrap for styling.",
+      "Share your recipes with the world! This app was built using the MERN stack. It uses MongoDB and Cloudinary for database storage, Express for the server, React for the front-end and Node.js for the back-end. It also uses Bootstrap for styling.",
     image: "./project-1.gif",
     link: "https://bubbas-recipes.herokuapp.com/",
   },
   {
     title: "Federation Field Guide",
-    subtitle: "Simple Node API work with CSS Templates",
+    subtitle: "Node.js API with CSS Templates",
     description:
-      "This app was built using Node.js, Express, MongoDB and CSS. While extremely simple, it was a great way to learn how to use Node.js and Express to build a simple API. It's also a great example of how to use CSS templates to create a great looking app.",
+      "This app was built using Node.js, Express, MongoDB and CSS. It demonstrates how to create a simple API using Node.js and Express, and showcases the use of CSS templates for an attractive user interface.",
     image: "./project-2.gif",
     link: "https://trek-field-guide.netlify.app/",
   },
@@ -54,11 +54,13 @@ export const skills = [
   "JavaScript",
   "React",
   "Express.js",
-  "Node",
+  "Node.js",
   "MongoDB",
   "Bootstrap",
   "Tailwind CSS",
   "EJS",
   "Git",
   "GitHub",
+  "RESTful APIs",
+  "Responsive Web Design",
 ];

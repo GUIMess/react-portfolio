@@ -4,6 +4,7 @@ export default function Contact() {
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [message, setMessage] = React.useState("");
+    const [errors, setErrors] = React.useState({});
 
     function encode(data) {
         return Object.keys(data)
@@ -15,12 +16,28 @@ export default function Contact() {
 
     function handleSubmit(e) {
         e.preventDefault();
+        const formErrors = {};
+        if (!name.trim()) formErrors.name = "Name is required";
+        if (!email.trim()) formErrors.email = "Email is required";
+        if (!message.trim()) formErrors.message = "Message is required";
+
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors);
+            return;
+        }
+
         fetch("/", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: encode({ "form-name": "contact", name, email, message }),
         })
-            .then(() => alert("Message sent!"))
+            .then(() => {
+                alert("Message sent!");
+                setName("");
+                setEmail("");
+                setMessage("");
+                setErrors({});
+            })
             .catch((error) => alert(error));
     }
 
@@ -82,9 +99,11 @@ export default function Contact() {
                             type="text"
                             id="name"
                             name="name"
-                            className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                            className={`w-full bg-gray-800 rounded border ${errors.name ? 'border-red-500' : 'border-gray-700'} focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out`}
                             onChange={(e) => setName(e.target.value)}
+                            value={name}
                         />
+                        {errors.name && <p className="text-red-500 text-xs italic">{errors.name}</p>}
                     </div>
                     <div className="relative mb-4">
                         <label htmlFor="email" className="leading-7 text-sm text-gray-400">
@@ -94,9 +113,11 @@ export default function Contact() {
                             type="email"
                             id="email"
                             name="email"
-                            className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                            className={`w-full bg-gray-800 rounded border ${errors.email ? 'border-red-500' : 'border-gray-700'} focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out`}
                             onChange={(e) => setEmail(e.target.value)}
+                            value={email}
                         />
+                        {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
                     </div>
                     <div className="relative mb-4">
                         <label
@@ -107,9 +128,11 @@ export default function Contact() {
                         <textarea
                             id="message"
                             name="message"
-                            className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                            className={`w-full bg-gray-800 rounded border ${errors.message ? 'border-red-500' : 'border-gray-700'} focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out`}
                             onChange={(e) => setMessage(e.target.value)}
+                            value={message}
                         />
+                        {errors.message && <p className="text-red-500 text-xs italic">{errors.message}</p>}
                     </div>
                     <button
                         type="submit"
