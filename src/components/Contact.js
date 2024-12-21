@@ -81,61 +81,38 @@ export default function Contact({ theme }) {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = (e) => {
     setIsSubmitting(true);
     setErrors({});
 
-    try {
-      // Validate form with fun messages
-      const newErrors = {};
-      if (!formData.name.trim()) {
-        newErrors.name = "Your name is like my social life - nonexistent!";
-      } else if (formData.name.length < 2) {
-        newErrors.name = "That's shorter than my attention span! Need at least 2 characters.";
-      }
-
-      if (!formData.email.trim()) {
-        newErrors.email = "Email missing - like my motivation on Mondays!";
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = "That email looks about as real as my workout routine!";
-      }
-
-      if (!formData.message.trim()) {
-        newErrors.message = "Message empty? Like my bank account after buying dev tools!";
-      } else if (formData.message.length < 10) {
-        newErrors.message = "C'mon, write more! Even my git commits are longer than that!";
-      }
-
-      if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        setSubmitStatus('error');
-        return;
-      }
-
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: encode({
-          'form-name': 'contact',
-          ...formData,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Form submission failed with status ${response.status}`);
-      }
-
-      setSubmitStatus('success');
-      setFormData({ name: "", email: "", message: "" });
-    } catch (error) {
-      console.error('Form submission error:', error);
-      setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
+    const newErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = "Your name is like my social life - nonexistent!";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "That's shorter than my attention span! Need at least 2 characters.";
     }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email missing - like my motivation on Mondays!";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "That email looks about as real as my workout routine!";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = "Message empty? Like my bank account after buying dev tools!";
+    } else if (formData.message.length < 10) {
+      newErrors.message = "C'mon, write more! Even my git commits are longer than that!";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      e.preventDefault();
+      setErrors(newErrors);
+      setSubmitStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
+    setSubmitStatus('success');
   };
 
   return (
