@@ -87,12 +87,25 @@ export default function Contact({ theme }) {
     setErrors({});
 
     try {
-      // Validate form
+      // Validate form with fun messages
       const newErrors = {};
-      if (!formData.name.trim()) newErrors.name = "Name is required";
-      if (!formData.email.trim()) newErrors.email = "Email is required";
-      else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
-      if (!formData.message.trim()) newErrors.message = "Message is required";
+      if (!formData.name.trim()) {
+        newErrors.name = "Your name is like my social life - nonexistent!";
+      } else if (formData.name.length < 2) {
+        newErrors.name = "That's shorter than my attention span! Need at least 2 characters.";
+      }
+
+      if (!formData.email.trim()) {
+        newErrors.email = "Email missing - like my motivation on Mondays!";
+      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = "That email looks about as real as my workout routine!";
+      }
+
+      if (!formData.message.trim()) {
+        newErrors.message = "Message empty? Like my bank account after buying dev tools!";
+      } else if (formData.message.length < 10) {
+        newErrors.message = "C'mon, write more! Even my git commits are longer than that!";
+      }
 
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
@@ -102,12 +115,11 @@ export default function Contact({ theme }) {
 
       // Mock successful submission for now
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setSubmitStatus('Message sent successfully!');
+      setSubmitStatus('Message sent successfully! I\'ll respond faster than my code compiles! 🚀');
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      const errorMessage = error?.message || 'An unknown error occurred';
-      console.error('Form submission error:', errorMessage);
-      setSubmitStatus(`Error: ${errorMessage}`);
+      console.error('Form submission error:', error);
+      setSubmitStatus('Error: My code broke faster than my New Year\'s resolutions! 😅');
     } finally {
       setIsSubmitting(false);
     }
