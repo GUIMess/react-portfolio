@@ -186,8 +186,14 @@ export default function Contact({ theme }) {
 
           <form
             onSubmit={handleSubmit}
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
             className="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0"
           >
+            <input type="hidden" name="form-name" value="contact" />
+            <input type="hidden" name="bot-field" />
             <h2
               className={`${theme.text.primary} text-3xl mb-1 font-medium title-font`}
             >
