@@ -113,10 +113,21 @@ export default function Contact({ theme }) {
         return;
       }
 
-      // Mock successful submission for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setSubmitStatus('Message sent successfully! I\'ll respond faster than my code compiles! 🚀');
-      setFormData({ name: "", email: "", message: "" });
+      const form = e.target;
+      const formData = new FormData(form);
+      
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString()
+      });
+
+      if (response.ok) {
+        setSubmitStatus('Message sent successfully! I\'ll respond faster than my code compiles! 🚀');
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        throw new Error('Form submission failed');
+      }
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmitStatus('Error: My code broke faster than my New Year\'s resolutions! 😅');
