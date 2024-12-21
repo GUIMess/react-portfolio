@@ -169,6 +169,7 @@ export default function Contact({ theme }) {
             onSubmit={handleSubmit}
             name="contact"
             method="POST"
+            action="/success"
             data-netlify="true"
             netlify-honeypot="bot-field"
             className="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0"
