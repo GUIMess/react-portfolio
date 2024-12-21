@@ -113,16 +113,15 @@ export default function Contact({ theme }) {
         return;
       }
 
-      // Encode the form data for Netlify
-      const encodedData = new URLSearchParams({
-        'form-name': 'contact',
-        ...formData
-      }).toString();
-
       const response = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encodedData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: encode({
+          'form-name': 'contact',
+          ...formData,
+        }),
       });
 
       if (!response.ok) {
