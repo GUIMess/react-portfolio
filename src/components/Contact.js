@@ -83,32 +83,31 @@ export default function Contact({ theme }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitStatus(null);
-
-    if (!validateForm()) {
-      if (Object.keys(errors).length > 2) {
-        setSubmitStatus("Wow, you're really testing my error handling!");
-      }
-      return;
-    }
-
     setIsSubmitting(true);
+    setErrors({});
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      // Validate form
+      const newErrors = {};
+      if (!formData.name.trim()) newErrors.name = "Name is required";
+      if (!formData.email.trim()) newErrors.email = "Email is required";
+      else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
+      if (!formData.message.trim()) newErrors.message = "Message is required";
 
-      if (!response.ok) throw new Error("Server is having a coffee break!");
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        setSubmitStatus('Form validation failed');
+        return;
+      }
 
-      setSubmitStatus(
-        "Message sent! I'll respond faster than a Rust compiler!"
-      );
+      // Mock successful submission for now
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setSubmitStatus('Message sent successfully!');
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      setSubmitStatus("Error: Have you tried turning it off and on again?");
+      const errorMessage = error?.message || 'An unknown error occurred';
+      console.error('Form submission error:', errorMessage);
+      setSubmitStatus(`Error: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -294,11 +293,11 @@ export default function Contact({ theme }) {
       </section>
 
       {/* Enhanced Footer */}
-      <footer className={`${theme.secondary} py-8`}>
-        <div className="container mx-auto px-5">
-          <div className="flex flex-wrap justify-between items-center">
+      <footer className={`${theme.secondary} body-font`}>
+        <div className="container px-5 py-8 mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="w-full md:w-auto text-center md:text-left mb-4 md:mb-0">
-              <p className={theme.text.secondary}>
+              <p className={`text-sm ${theme.text.secondary}`}>
                 © {new Date().getFullYear()} Catalin Siegling. All rights
                 reserved.
               </p>
@@ -320,14 +319,6 @@ export default function Contact({ theme }) {
                   className={`${theme.text.secondary} hover:text-indigo-500 transition-colors`}
                 >
                   LinkedIn
-                </a>
-                <a
-                  href="https://twitter.com/yourusername"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${theme.text.secondary} hover:text-indigo-500 transition-colors`}
-                >
-                  Twitter
                 </a>
               </div>
             </div>

@@ -23,7 +23,7 @@ export default function Footer({ theme }) {
                 
                 <div className="flex space-x-4 mt-4">
                     <a 
-                        href="https://github.com/catalinsiegling" 
+                        href="https://github.com/GUIMess" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className={`${theme.text.secondary} hover:${theme.text.accent}`}
@@ -33,7 +33,7 @@ export default function Footer({ theme }) {
                         </svg>
                     </a>
                     <a 
-                        href="https://linkedin.com/in/catalinsiegling" 
+                        href="https://linkedin.com/in/catalin-siegling" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className={`${theme.text.secondary} hover:${theme.text.accent}`}
