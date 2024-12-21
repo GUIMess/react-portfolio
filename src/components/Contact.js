@@ -109,28 +109,31 @@ export default function Contact({ theme }) {
 
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
-        setSubmitStatus('Form validation failed');
+        setSubmitStatus('error');
         return;
       }
 
-      const form = e.target;
-      const formData = new FormData(form);
-      
-      const response = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData).toString()
+      // Encode the form data for Netlify
+      const encodedData = new URLSearchParams({
+        'form-name': 'contact',
+        ...formData
+      }).toString();
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodedData
       });
 
-      if (response.ok) {
-        setSubmitStatus('Message sent successfully! I\'ll respond faster than my code compiles! 🚀');
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        throw new Error('Form submission failed');
+      if (!response.ok) {
+        throw new Error(`Form submission failed with status ${response.status}`);
       }
+
+      setSubmitStatus('success');
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error('Form submission error:', error);
-      setSubmitStatus('Error: My code broke faster than my New Year\'s resolutions! 😅');
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -200,11 +203,9 @@ export default function Contact({ theme }) {
             name="contact"
             method="POST"
             data-netlify="true"
-            netlify-honeypot="bot-field"
             className="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0"
           >
             <input type="hidden" name="form-name" value="contact" />
-            <input type="hidden" name="bot-field" />
             <h2
               className={`${theme.text.primary} text-3xl mb-1 font-medium title-font`}
             >
