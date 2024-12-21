@@ -139,38 +139,6 @@ export default function Contact({ theme }) {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = "Your name is like my social life - nonexistent!";
-    } else if (formData.name.length < 2) {
-      newErrors.name =
-        "That's shorter than my attention span! Need at least 2 characters.";
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = "Email missing - like my motivation on Mondays!";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "That email looks about as real as my workout routine!";
-    }
-
-    // Message validation
-    if (!formData.message.trim()) {
-      newErrors.message =
-        "Message empty? Like my bank account after buying dev tools!";
-    } else if (formData.message.length < 10) {
-      newErrors.message =
-        "C'mon, write more! Even my git commits are longer than that!";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   return (
     <>
       <section id="contact" className={`${theme.primary} relative`}>
@@ -203,9 +171,11 @@ export default function Contact({ theme }) {
             name="contact"
             method="POST"
             data-netlify="true"
+            netlify-honeypot="bot-field"
             className="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0"
           >
             <input type="hidden" name="form-name" value="contact" />
+            <input type="hidden" name="bot-field" />
             <h2
               className={`${theme.text.primary} text-3xl mb-1 font-medium title-font`}
             >
@@ -335,7 +305,7 @@ export default function Contact({ theme }) {
             <div className="w-full md:w-auto text-center md:text-right">
               <div className="flex justify-center md:justify-end space-x-6">
                 <a
-                  href="https://github.com/yourusername"
+                  href="https://github.com/GUIMess"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${theme.text.secondary} hover:text-indigo-500 transition-colors`}
@@ -343,7 +313,7 @@ export default function Contact({ theme }) {
                   GitHub
                 </a>
                 <a
-                  href="https://linkedin.com/in/yourusername"
+                  href="https://linkedin.com/in/catalin-siegling"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`${theme.text.secondary} hover:text-indigo-500 transition-colors`}
