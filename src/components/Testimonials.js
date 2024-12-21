@@ -1,40 +1,66 @@
 import React from "react";
-import { TerminalIcon, UsersIcon } from "@heroicons/react/solid";
-import { testimonials } from "../data";
+import { motion } from "framer-motion";
+import { UserGroupIcon } from "@heroicons/react/solid";
+import { content, testimonials } from "../data";
 
-export default function Testimonials() {
+export default function Testimonials({ theme }) {
     return (
-        <section id="testimonials">
-            <div className="container px-5 py-10 mx-auto text-center">
-                <UsersIcon className="w-10 inline-block mb-4" />
-                <h1 className="sm:text-4xl text-3xl font-medium title-font text-white mb-12">
-                    Client Testimonials
-                </h1>
-                <div className="flex flex-wrap m-4">
-                    {testimonials.map((testimonial) => (
-                        <div className="p-4 md:w-1/2 w-full">
-                            <div className="h-full bg-gray-800 bg-opacity-40 p-8 rounded">
-                                <TerminalIcon className="block w-8 text-gray-500 mb-4" />
-                                <p className="leading-relaxed mb-6">{testimonial.quote}</p>
-                                <div className="inline-flex items-center">
-                                    <img
-                                        alt="testimonial"
-                                        src={testimonial.image}
-                                        className="w-12 rounded-full flex-shrink-0 object-cover object-center"
-                                    />
-                                    <span className="flex-grow flex flex-col pl-4">
-                                        <span className="title-font font-medium text-white">
-                                            {testimonial.name}
-                                        </span>
-                                        <span className="text-gray-500 text-sm uppercase">
-                                            {testimonial.company}
-                                        </span>
-                                    </span>
+        <section id="testimonials" className={`${theme.primary} body-font py-20`}>
+            <div className="container px-5 mx-auto">
+                <motion.div
+                    className="text-center mb-16"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <UserGroupIcon className={`mx-auto inline-block w-10 mb-4 ${theme.text.accent}`} />
+                    <h1 className={`sm:text-4xl text-3xl font-medium title-font mb-4 ${theme.text.primary}`}>
+                        {content.testimonialsSection.intro}
+                    </h1>
+                    <p className={`lg:w-2/3 mx-auto leading-relaxed text-base ${theme.text.secondary}`}>
+                        {content.testimonialsSection.description}
+                    </p>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    {testimonials.map((testimonial, index) => (
+                        <motion.div
+                            key={testimonial.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className={`${theme.secondary} rounded-lg p-8 h-full backdrop-blur-sm bg-opacity-50`}
+                        >
+                            <p className={`text-lg leading-relaxed mb-6 ${theme.text.secondary} italic`}>
+                                "{testimonial.quote}"
+                            </p>
+                            <div className="flex items-center">
+                                <img
+                                    alt={testimonial.name}
+                                    src={testimonial.image}
+                                    className="w-12 h-12 rounded-full object-cover"
+                                />
+                                <div className="ml-4">
+                                    <p className={`${theme.text.primary} font-medium`}>
+                                        {testimonial.name}
+                                    </p>
+                                    <p className={`${theme.text.secondary} text-sm`}>
+                                        {testimonial.company}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
+
+                <motion.p 
+                    className={`mt-12 text-sm ${theme.text.secondary} italic text-center`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1 }}
+                >
+                    {content.testimonialsSection.disclaimer}
+                </motion.p>
             </div>
         </section>
     );

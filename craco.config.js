@@ -3,11 +3,13 @@ module.exports = {
     enable: false
   },
   style: {
-    postOptions: {
-      plugins: [
-        require('tailwindcss'),
-        require('autoprefixer'),
-      ],
+    postcss: {
+      mode: 'file',
+      loaderOptions: {
+        postcssOptions: {
+          sourceMap: true,
+        },
+      },
     },
   },
 }
