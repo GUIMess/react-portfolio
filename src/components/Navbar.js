@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import PropTypes from 'prop-types';
 
 export default function Navbar({ theme, isDarkMode, handleThemeChange, isRainbowMode }) {
   return (
     <header className={theme.primary}>
       <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
-          <a href="#projects" className={`mr-5 hover:text-indigo-500 transition-colors ${isDarkMode ? 'text-white' : theme.hover}`}>
+        <nav className="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto" role="navigation" aria-label="Main navigation">
+          <a 
+            href="#projects" 
+            className={`mr-5 hover:text-indigo-500 transition-colors ${isDarkMode ? 'text-white' : theme.hover}`}
+            aria-label="View projects section"
+          >
             Past Work
           </a>
           <a href="#skills" className={`mr-5 hover:text-indigo-500 transition-colors ${isDarkMode ? 'text-white' : theme.hover}`}>
@@ -59,3 +64,17 @@ export default function Navbar({ theme, isDarkMode, handleThemeChange, isRainbow
     </header>
   );
 }
+
+Navbar.propTypes = {
+  theme: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    hover: PropTypes.string.isRequired,
+    text: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      accent: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired,
+  isDarkMode: PropTypes.bool.isRequired,
+  isRainbowMode: PropTypes.bool.isRequired,
+  handleThemeChange: PropTypes.func.isRequired
+};

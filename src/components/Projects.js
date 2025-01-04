@@ -2,6 +2,7 @@ import { CodeIcon } from "@heroicons/react/solid";
 import React from "react";
 import { motion } from "framer-motion";
 import { content, projects } from "../data";
+import PropTypes from 'prop-types';
 
 const loadingMessages = [
   "Reticulating splines...",
@@ -36,62 +37,77 @@ export default function Projects({ theme }) {
             {content.projectsSection.description}
           </p>
         </motion.div>
-        <div className="flex flex-wrap -m-4">
+        <ul className="flex flex-wrap -m-4">
           {projects.map((project, index) => (
-            <motion.a
-              href={project.link}
-              key={project.image}
-              className="sm:w-1/2 w-100 p-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{
-                scale: 1.02,
-                rotate: [0, 0.5, 0],
-                transition: { duration: 0.2 },
-              }}
-              whileTap={{ scale: 0.98 }}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div
-                className={`${theme.secondary} rounded-lg h-full overflow-hidden`}
+            <li key={project.title} className="sm:w-1/2 w-100 p-4">
+              <motion.a
+                href={project.link}
+                className="sm:w-1/2 w-100 p-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{
+                  scale: 1.02,
+                  rotate: [0, 0.5, 0],
+                  transition: { duration: 0.2 },
+                }}
+                whileTap={{ scale: 0.98 }}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View ${project.title} project`}
               >
-                <img
-                  alt={project.title}
-                  className="lg:h-48 md:h-36 w-full object-cover object-center"
-                  src={project.image}
-                />
-                <div className="p-6">
-                  <h2
-                    className={`text-sm title-font font-medium ${theme.text.accent} mb-1`}
-                  >
-                    {project.subtitle}
-                  </h2>
-                  <h1
-                    className={`title-font text-lg font-medium ${theme.text.primary} mb-3`}
-                  >
-                    {project.title}
-                  </h1>
-                  <p className={`leading-relaxed mb-3 ${theme.text.secondary}`}>
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {project.technologies?.map((tech) => (
-                      <span
-                        key={tech}
-                        className={`inline-block px-2 py-1 text-xs rounded ${theme.badge}`}
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                <div
+                  className={`${theme.secondary} rounded-lg h-full overflow-hidden`}
+                >
+                  <img
+                    alt={project.title}
+                    className="lg:h-48 md:h-36 w-full object-cover object-center"
+                    src={project.image}
+                  />
+                  <div className="p-6">
+                    <h2
+                      className={`text-sm title-font font-medium ${theme.text.accent} mb-1`}
+                    >
+                      {project.subtitle}
+                    </h2>
+                    <h1
+                      className={`title-font text-lg font-medium ${theme.text.primary} mb-3`}
+                    >
+                      {project.title}
+                    </h1>
+                    <p className={`leading-relaxed mb-3 ${theme.text.secondary}`}>
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {project.technologies?.map((tech) => (
+                        <span
+                          key={tech}
+                          className={`inline-block px-2 py-1 text-xs rounded ${theme.badge}`}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.a>
+              </motion.a>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
 }
+
+Projects.propTypes = {
+  theme: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+    text: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      secondary: PropTypes.string.isRequired,
+      accent: PropTypes.string.isRequired
+    }).isRequired,
+    badge: PropTypes.string.isRequired
+  }).isRequired
+};

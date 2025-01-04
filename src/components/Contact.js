@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import PropTypes from 'prop-types';
 
 export default function Contact({ theme }) {
   const [formData, setFormData] = useState({
@@ -177,9 +178,14 @@ export default function Contact({ theme }) {
                 value={formData.name}
                 onChange={handleChange}
                 className={`w-full ${theme.secondary} ${theme.border} ${theme.text.primary} rounded focus:ring-2 focus:ring-indigo-900 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out`}
+                aria-required="true"
+                aria-invalid={errors.name ? "true" : "false"}
+                aria-describedby={errors.name ? "name-error" : undefined}
               />
               {errors.name && (
                 <motion.p
+                  id="name-error"
+                  role="alert"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-red-500 text-xs mt-1"
@@ -305,3 +311,18 @@ export default function Contact({ theme }) {
     </>
   );
 }
+
+Contact.propTypes = {
+  theme: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+    text: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      secondary: PropTypes.string.isRequired
+    }).isRequired,
+    border: PropTypes.string.isRequired,
+    button: PropTypes.shape({
+      primary: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired
+};

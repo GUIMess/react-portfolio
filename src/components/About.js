@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { content } from "../data";
 import heroImage from "../assets/coding.svg";
+import PropTypes from "prop-types";
 
 export default function About({ theme }) {
   return (
@@ -28,7 +29,10 @@ export default function About({ theme }) {
             <motion.a
               href="#contact"
               className={`inline-flex text-white ${theme.button.primary} border-0 py-2 px-6 focus:outline-none rounded text-lg`}
-              whileHover={{ scale: 1.05, boxShadow: "0px 5px 15px rgba(0,0,0,0.2)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0px 5px 15px rgba(0,0,0,0.2)",
+              }}
               whileTap={{ scale: 0.95 }}
             >
               Work With Me
@@ -50,14 +54,14 @@ export default function About({ theme }) {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <motion.img
-            animate={{ 
+            animate={{
               y: [0, -10, 0],
-              rotate: [-1, 1, -1]
+              rotate: [-1, 1, -1],
             }}
-            transition={{ 
+            transition={{
               duration: 5,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
             className="object-cover object-center rounded"
             alt="hero"
@@ -68,3 +72,16 @@ export default function About({ theme }) {
     </section>
   );
 }
+
+About.propTypes = {
+  theme: PropTypes.shape({
+    text: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      secondary: PropTypes.string.isRequired,
+    }).isRequired,
+    button: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      secondary: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};

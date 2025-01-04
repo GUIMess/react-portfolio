@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from 'prop-types';
 
 export default function Toast({ message, isVisible, onClose }) {
   return (
@@ -28,4 +29,10 @@ export default function Toast({ message, isVisible, onClose }) {
       )}
     </AnimatePresence>
   );
-} 
+}
+
+Toast.propTypes = {
+  message: PropTypes.string.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
+}; 

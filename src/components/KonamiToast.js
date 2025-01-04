@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from 'prop-types';
 
 export default function KonamiToast({ isVisible, onClose }) {
   return (
@@ -32,4 +33,9 @@ export default function KonamiToast({ isVisible, onClose }) {
       )}
     </AnimatePresence>
   );
-} 
+}
+
+KonamiToast.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
+}; 

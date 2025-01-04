@@ -2,6 +2,7 @@ import { ChipIcon } from "@heroicons/react/solid";
 import React from "react";
 import { motion } from "framer-motion";
 import { content, skillsList } from "../data";
+import PropTypes from 'prop-types';
 
 export default function Skills({ theme }) {
     return (
@@ -36,26 +37,32 @@ export default function Skills({ theme }) {
                     whileInView="show"
                     viewport={{ once: true }}
                 >
-                    {skillsList.map((skill) => (
-                        <motion.div 
-                            key={skill} 
-                            className="p-2 sm:w-1/2 w-full"
-                            variants={{
-                                hidden: { opacity: 0, x: -20 },
-                                show: { opacity: 1, x: 0 }
-                            }}
-                            whileHover={{ scale: 1.02 }}
-                        >
-                            <div className={`${theme.secondary} rounded flex p-4 h-full items-center`}>
-                                <ChipIcon className={`text-green-400 w-6 h-6 flex-shrink-0 mr-4`} />
-                                <span className={`title-font font-medium ${theme.text.primary}`}>
-                                    {skill}
-                                </span>
-                            </div>
-                        </motion.div>
-                    ))}
+                    <ul className="flex flex-wrap lg:w-4/5 sm:mx-auto sm:mb-2 -mx-2">
+                        {skillsList.map((skill) => (
+                            <li key={skill} className="p-2 sm:w-1/2 w-full">
+                                <div className={`${theme.secondary} rounded flex p-4 h-full items-center`}>
+                                    <ChipIcon className={`text-green-400 w-6 h-6 flex-shrink-0 mr-4`} aria-hidden="true" />
+                                    <span className={`title-font font-medium ${theme.text.primary}`}>
+                                        {skill}
+                                    </span>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </motion.div>
             </div>
         </section>
     );
 }
+
+Skills.propTypes = {
+  theme: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+    text: PropTypes.shape({
+      primary: PropTypes.string.isRequired,
+      secondary: PropTypes.string.isRequired,
+      accent: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired
+};

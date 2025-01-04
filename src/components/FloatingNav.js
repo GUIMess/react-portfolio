@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpIcon } from "@heroicons/react/solid";
+import PropTypes from 'prop-types';
 
 export default function FloatingNav({ theme }) {
     const [isVisible, setIsVisible] = useState(false);
@@ -46,10 +47,19 @@ export default function FloatingNav({ theme }) {
                     className={`fixed ${isNearFooter ? 'bottom-20' : 'bottom-8'} right-8 p-3 rounded-full ${theme.button.primary} shadow-lg z-50 transition-all duration-300`}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
+                    aria-label="Scroll to top of page"
                 >
                     <ArrowUpIcon className="h-6 w-6 text-white" />
                 </motion.button>
             )}
         </AnimatePresence>
     );
-} 
+}
+
+FloatingNav.propTypes = {
+    theme: PropTypes.shape({
+        button: PropTypes.shape({
+            primary: PropTypes.string.isRequired
+        }).isRequired
+    }).isRequired
+}; 
