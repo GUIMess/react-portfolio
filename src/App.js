@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
+import { ArrowUpIcon } from "@heroicons/react/solid";
+import { motion } from "framer-motion";
+
+// Components
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Navbar from "./components/Navbar";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Testimonials from "./components/Testimonials";
-import './rainbow.css';
 import Toast from './components/Toast';
 import KonamiToast from './components/KonamiToast';
-import { ArrowUpIcon } from "@heroicons/react/solid";
-import { motion } from "framer-motion";
+import LoadingState from './components/LoadingState';
+import SEO from "./SEO";
+import ErrorBoundary from './components/ErrorBoundary';
+
+// Styles
+import './rainbow.css';
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -28,6 +36,7 @@ export default function App() {
   const [isMatrix, setIsMatrix] = useState(false);
   const [isDisco, setIsDisco] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Define theme first
   const theme = {
@@ -47,11 +56,14 @@ export default function App() {
     },
     text: {
       primary: isRainbowMode || isDarkMode ? 'text-white' : 'text-gray-900',
-      secondary: isRainbowMode ? 'text-white/90' : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+      secondary: isRainbowMode ? 'text-white/90' : isDarkMode ? 'text-gray-400' : 'text-gray-600',
+      accent: isDarkMode ? 'text-indigo-400' : 'text-indigo-600'
     },
     hover: isRainbowMode 
       ? 'text-white hover:text-pink-200' 
-      : isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+      : isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900',
+    border: isDarkMode ? 'border-gray-800' : 'border-gray-200',
+    badge: isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'
   };
 
   const handleThemeChange = () => {
@@ -76,16 +88,18 @@ export default function App() {
 
   useEffect(() => {
     const konamiCode = "ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba";
+    let lastKeyTime = 0;
+    const keyTimeout = 1000; // Reset after 1 second of no input
     
     const handleKeyDown = (e) => {
-      const newBuffer = konamiBuffer + e.key;
-      console.log('Current buffer:', newBuffer); // Debug log
-      
-      if (newBuffer.length > konamiCode.length) {
-        setKonamiBuffer(newBuffer.slice(-konamiCode.length));
-      } else {
-        setKonamiBuffer(newBuffer);
+      const currentTime = Date.now();
+      if (currentTime - lastKeyTime > keyTimeout) {
+        setKonamiBuffer("");
       }
+      lastKeyTime = currentTime;
+
+      const newBuffer = konamiBuffer + e.key;
+      setKonamiBuffer(newBuffer.slice(-konamiCode.length));
 
       if (newBuffer.includes(konamiCode)) {
         setShakeScreen(true);
@@ -94,24 +108,32 @@ export default function App() {
           setShakeScreen(false);
           setShowKonamiToast(false);
         }, 3000);
-        console.log('%c⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️🅱️🅰️', 'font-size: 20px');
-        console.log('%cKONAMI CODE ACTIVATED! You\'re a true gamer! 🎮', 'color: #6366F1; font-size: 16px');
+        // Only log if not already logged in this session
+        if (!window.konamiLogged) {
+          console.log('%c⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️🅱️🅰️', 'font-size: 20px');
+          console.log('%cKONAMI CODE ACTIVATED! You\'re a true gamer! 🎮', 'color: #6366F1; font-size: 16px');
+          window.konamiLogged = true;
+        }
         setKonamiBuffer("");
       }
 
       // Secret commands help
       if (e.key === '/' && e.ctrlKey) {
         e.preventDefault();
-        console.log('%cSecret Commands:', 'color: #6366F1; font-size: 16px');
-        console.log('Try these anywhere:');
-        console.log('1. ↑↑↓↓←→←→BA - Konami Code');
-        console.log('2. Type "bounce" - Makes everything bounce');
-        console.log('3. Type "rain" - Makes it rain emojis');
-        console.log('4. Type "party" - Starts a party');
-        console.log('5. Type "flip" - Flips the page upside down');
-        console.log('6. Type "matrix" - Enter the matrix');
-        console.log('7. Type "disco" - Disco mode');
-        console.log('8. Click theme toggle 5 times - Rainbow mode');
+        // Only log if not already logged in this session
+        if (!window.secretsLogged) {
+          console.log('%cSecret Commands:', 'color: #6366F1; font-size: 16px');
+          console.log('Try these anywhere:');
+          console.log('1. ↑↑↓↓←→←→BA - Konami Code');
+          console.log('2. Type "bounce" - Makes everything bounce');
+          console.log('3. Type "rain" - Makes it rain emojis');
+          console.log('4. Type "party" - Starts a party');
+          console.log('5. Type "flip" - Flips the page upside down');
+          console.log('6. Type "matrix" - Enter the matrix');
+          console.log('7. Type "disco" - Disco mode');
+          console.log('8. Click theme toggle 5 times - Rainbow mode');
+          window.secretsLogged = true;
+        }
       }
 
       // Check for typed commands
@@ -181,7 +203,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [konamiBuffer, shakeScreen]); // Added shakeScreen to dependencies
+  }, [konamiBuffer]);
 
   // Add this CSS for the falling animation
   useEffect(() => {
@@ -206,12 +228,15 @@ export default function App() {
     const handleChange = (e) => setIsDarkMode(e.matches);
     mediaQuery.addEventListener('change', handleChange);
     
-    // Easter egg logs
-    console.log('%c👋 Welcome to my portfolio!', 'font-size: 20px; font-weight: bold;');
-    console.log('%c🕵️ Looking for secrets? Try these:', 'color: #6366F1; font-size: 16px');
-    console.log('1. Click the theme toggle 5 times');
-    console.log('2. Type the Konami code');
-    console.log('3. Press Ctrl + / for more secrets');
+    // Easter egg welcome message
+    if (!window.welcomeLogged) {
+      console.log('%c👋 Welcome to my portfolio!', 'font-size: 20px; font-weight: bold;');
+      console.log('%c🕵️ Looking for secrets? Try these:', 'color: #6366F1; font-size: 16px');
+      console.log('1. Click the theme toggle 5 times');
+      console.log('2. Type the Konami code');
+      console.log('3. Press Ctrl + / for more secrets');
+      window.welcomeLogged = true;
+    }
 
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
@@ -236,53 +261,68 @@ export default function App() {
     });
   };
 
-  return (
-    <div 
-      className={`min-h-screen transition-all duration-300
-        ${shakeScreen ? 'animate-shake' : ''} 
-        ${isBouncing ? 'animate-bounce' : ''} 
-        ${isPartyMode ? 'animate-pulse' : ''}
-        ${isUpsideDown ? 'rotate-180' : ''}
-        ${isMatrix ? 'matrix-effect' : ''}
-        ${isDisco ? 'animate-disco' : ''}
-        ${isRainbowMode 
-          ? 'rainbow-gradient' 
-          : theme.primary
-        }`}
-    >
-      <Navbar 
-        theme={theme} 
-        isDarkMode={isDarkMode}
-        isRainbowMode={isRainbowMode}
-        handleThemeChange={handleThemeChange}
-      />
-      <About theme={theme} />
-      <Projects theme={theme} />
-      <Skills theme={theme} />
-      <Testimonials theme={theme} />
-      <Contact theme={theme} />
-      
-      {/* Scroll to top button */}
-      {showScrollTop && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          onClick={scrollToTop}
-          className={`fixed bottom-8 right-8 p-3 rounded-full ${theme.button.primary} shadow-lg z-50`}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <ArrowUpIcon className="h-6 w-6 text-white" />
-        </motion.button>
-      )}
+  useEffect(() => {
+    // Simulate loading time or actual data fetching
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
-      <Toast 
-        message="🦄 Unicorn mode activated! You found the secret theme!" 
-        isVisible={showToast}
-        onClose={() => setShowToast(false)}
-      />
-      <KonamiToast isVisible={showKonamiToast} onClose={() => setShowKonamiToast(false)} />
-    </div>
+  if (isLoading) {
+    return <LoadingState theme={theme} />;
+  }
+
+  return (
+    <HelmetProvider>
+      <ErrorBoundary>
+        <SEO />
+        <div 
+          className={`min-h-screen transition-all duration-300
+            ${shakeScreen ? 'animate-shake' : ''} 
+            ${isBouncing ? 'animate-bounce' : ''} 
+            ${isPartyMode ? 'animate-pulse' : ''}
+            ${isUpsideDown ? 'rotate-180' : ''}
+            ${isMatrix ? 'matrix-effect' : ''}
+            ${isDisco ? 'animate-disco' : ''}
+            ${isRainbowMode 
+              ? 'rainbow-gradient' 
+              : theme.primary
+            }`}
+        >
+          <Navbar 
+            theme={theme} 
+            isDarkMode={isDarkMode}
+            isRainbowMode={isRainbowMode}
+            handleThemeChange={handleThemeChange}
+          />
+          <About theme={theme} />
+          <Projects theme={theme} />
+          <Skills theme={theme} />
+          <Testimonials theme={theme} />
+          <Contact theme={theme} />
+          
+          {/* Scroll to top button */}
+          {showScrollTop && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              onClick={scrollToTop}
+              className={`fixed bottom-8 right-8 p-3 rounded-full ${theme.button.primary} shadow-lg z-50`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <ArrowUpIcon className="h-6 w-6 text-white" />
+            </motion.button>
+          )}
+
+          <Toast 
+            message="🦄 Unicorn mode activated! You found the secret theme!" 
+            isVisible={showToast}
+            onClose={() => setShowToast(false)}
+          />
+          <KonamiToast isVisible={showKonamiToast} onClose={() => setShowKonamiToast(false)} />
+        </div>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }
