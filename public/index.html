@@ -21,9 +21,9 @@
   </head>
   <body>
     <div id="root"></div>
-    <form name="contact" method="POST" data-netlify="true">
-      <input type="text" name="name" />
-      <input type="email" name="email" />
+    <form name="contact" method="POST" data-netlify="true" class="hidden">
+      <input type="text" name="name" autoComplete="name" />
+      <input type="email" name="email" autoComplete="email" />
       <textarea name="message"></textarea>
       <input type="hidden" name="form-name" value="contact" />
     </form>
