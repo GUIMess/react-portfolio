@@ -60,10 +60,10 @@ export default function App() {
       : "bg-white",
     button: {
       primary: isRainbowMode
-        ? "bg-indigo-500 hover:bg-indigo-600"
+        ? "bg-indigo-600 hover:bg-indigo-700"
         : isDarkMode
-        ? "bg-indigo-500 hover:bg-indigo-600"
-        : "bg-indigo-500 hover:bg-indigo-600",
+        ? "bg-indigo-600 hover:bg-indigo-700"
+        : "bg-indigo-700 hover:bg-indigo-800",
       secondary: "bg-gray-800 hover:bg-gray-700",
     },
     text: {
