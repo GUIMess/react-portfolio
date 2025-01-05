@@ -181,6 +181,7 @@ export default function Contact({ theme }) {
                 aria-required="true"
                 aria-invalid={errors.name ? "true" : "false"}
                 aria-describedby={errors.name ? "name-error" : undefined}
+                autoComplete="name"
               />
               {errors.name && (
                 <motion.p
@@ -210,6 +211,7 @@ export default function Contact({ theme }) {
                 value={formData.email}
                 onChange={handleChange}
                 className={`w-full ${theme.secondary} ${theme.border} ${theme.text.primary} rounded focus:ring-2 focus:ring-indigo-900 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out`}
+                autoComplete="email"
               />
               {errors.email && (
                 <motion.p
@@ -236,6 +238,7 @@ export default function Contact({ theme }) {
                 value={formData.message}
                 onChange={handleChange}
                 className={`w-full ${theme.secondary} ${theme.border} ${theme.text.primary} rounded focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out`}
+                autoComplete="off"
               />
               {errors.message && (
                 <motion.p
