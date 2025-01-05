@@ -20,13 +20,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import "./rainbow.css";
 
 export default function App() {
-  // Use localStorage for theme preference
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("appIsDarkMode");
     if (savedTheme !== null) {
       return JSON.parse(savedTheme);
     }
-    // If no saved preference, use system preference
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
@@ -40,13 +38,9 @@ export default function App() {
 
   const [isBouncing, setIsBouncing] = useState(false);
   const [isPartyMode, setIsPartyMode] = useState(false);
-  const [isUpsideDown, setIsUpsideDown] = useState(false);
-  const [isMatrix, setIsMatrix] = useState(false);
-  const [isDisco, setIsDisco] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Define theme first
   const theme = {
     primary: isRainbowMode
       ? "bg-transparent"
@@ -94,7 +88,7 @@ export default function App() {
         setIsDarkMode(false);
         setShowToast(true);
         setTimeout(() => setShowToast(false), 5000);
-        return 0; // Reset the click count after activating rainbow
+        return 0;
       }
       return newCount;
     });
@@ -106,7 +100,6 @@ export default function App() {
     }
   };
 
-  // Persist the dark mode preference
   useEffect(() => {
     localStorage.setItem("appIsDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
@@ -115,7 +108,7 @@ export default function App() {
     const konamiCode =
       "ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba";
     let lastKeyTime = 0;
-    const keyTimeout = 1000; // Reset after 1 second of no input
+    const keyTimeout = 1000;
 
     const handleKeyDown = (e) => {
       const currentTime = Date.now();
@@ -134,7 +127,6 @@ export default function App() {
           setShakeScreen(false);
           setShowKonamiToast(false);
         }, 3000);
-        // Only log if not already logged
         if (!window.konamiLogged) {
           console.log("%c⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️🅱️🅰️", "font-size: 20px");
           console.log(
@@ -146,53 +138,19 @@ export default function App() {
         setKonamiBuffer("");
       }
 
-      // Secret commands help
       if (e.key === "/" && e.ctrlKey) {
         e.preventDefault();
-        // Only log if not already logged
         if (!window.secretsLogged) {
           console.log("%cSecret Commands:", "color: #6366F1; font-size: 16px");
           console.log("Try these anywhere:");
           console.log("1. ↑↑↓↓←→←→BA - Konami Code");
           console.log('2. Type "bounce" - Makes everything bounce');
-          console.log('3. Type "rain" - Makes it rain emojis');
-          console.log('4. Type "party" - Starts a party');
-          console.log('5. Type "flip" - Flips the page upside down');
-          console.log('6. Type "matrix" - Enter the matrix');
-          console.log('7. Type "disco" - Disco mode');
-          console.log("8. Click theme toggle 5 times - Rainbow mode");
+          console.log('3. Type "party" - Starts a party');
+          console.log("4. Click theme toggle 5 times - Rainbow mode");
           window.secretsLogged = true;
         }
       }
 
-      // Check for typed commands
-      if (newBuffer.includes("rain")) {
-        e.preventDefault();
-        const emojis = ["💻", "🚀", "⚡", "🔥", "✨", "🎮", "🎯", "🎲"];
-        for (let i = 0; i < 50; i++) {
-          setTimeout(() => {
-            const raindrop = document.createElement("div");
-            raindrop.className = "raindrop";
-            raindrop.style.left = `${Math.random() * 100}vw`;
-            raindrop.style.fontSize = "24px";
-            raindrop.style.position = "fixed";
-            raindrop.style.top = "-20px";
-            raindrop.style.zIndex = "9999";
-            raindrop.style.pointerEvents = "none";
-            raindrop.style.animation = `fall ${Math.random() * 1 + 1}s linear`;
-            raindrop.innerText =
-              emojis[Math.floor(Math.random() * emojis.length)];
-            document.body.appendChild(raindrop);
-
-            raindrop.addEventListener("animationend", () => {
-              raindrop.remove();
-            });
-          }, i * 50);
-        }
-        setKonamiBuffer("");
-      }
-
-      // Check for bounce command
       if (newBuffer.includes("bounce")) {
         e.preventDefault();
         setIsBouncing(true);
@@ -200,35 +158,10 @@ export default function App() {
         setKonamiBuffer("");
       }
 
-      // Check for party command
       if (newBuffer.includes("party")) {
         e.preventDefault();
         setIsPartyMode(true);
         setTimeout(() => setIsPartyMode(false), 3000);
-        setKonamiBuffer("");
-      }
-
-      // Check for flip command
-      if (newBuffer.includes("flip")) {
-        e.preventDefault();
-        setIsUpsideDown(true);
-        setTimeout(() => setIsUpsideDown(false), 3000);
-        setKonamiBuffer("");
-      }
-
-      // Check for matrix command
-      if (newBuffer.includes("matrix")) {
-        e.preventDefault();
-        setIsMatrix(true);
-        setTimeout(() => setIsMatrix(false), 5000);
-        setKonamiBuffer("");
-      }
-
-      // Check for disco command
-      if (newBuffer.includes("disco")) {
-        e.preventDefault();
-        setIsDisco(true);
-        setTimeout(() => setIsDisco(false), 3000);
         setKonamiBuffer("");
       }
     };
@@ -238,35 +171,16 @@ export default function App() {
   }, [konamiBuffer]);
 
   useEffect(() => {
-    // Add falling animation style once
-    const style = document.createElement("style");
-    style.textContent = `
-      @keyframes fall {
-        from {
-          transform: translateY(-20px);
-        }
-        to {
-          transform: translateY(100vh);
-        }
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
-  // Add system preference listener
-  useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e) => setIsDarkMode(e.matches);
     mediaQuery.addEventListener("change", handleChange);
 
-    // Move console messages outside the welcomeLogged check
     console.log(
       "%c👋 Welcome to my portfolio!",
       "color: #6366F1; font-size: 24px; font-weight: bold;"
     );
     console.log(
-      "%c🕵️ Easter Eggs:", 
+      "%c🕵️ Easter Eggs:",
       "color: #10B981; font-size: 18px; font-weight: bold;"
     );
     console.log(
@@ -283,9 +197,8 @@ export default function App() {
     );
 
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []); // Empty dependency array ensures it runs once on mount
+  }, []);
 
-  // Scroll to top button logic
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 300;
@@ -303,14 +216,13 @@ export default function App() {
     });
   };
 
-  // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
   if (isLoading) {
-    return <LoadingState theme={theme} />;
+    return <LoadingState />;
   }
 
   return (
@@ -322,26 +234,21 @@ export default function App() {
             ${shakeScreen ? "animate-shake" : ""}
             ${isBouncing ? "animate-bounce" : ""}
             ${isPartyMode ? "animate-pulse" : ""}
-            ${isUpsideDown ? "rotate-180" : ""}
-            ${isMatrix ? "matrix-effect" : ""}
-            ${isDisco ? "animate-disco" : ""}
             ${isRainbowMode ? "rainbow-gradient" : theme.primary}`}
           role="main"
           aria-label="Portfolio content"
         >
           <Navbar
-            theme={theme}
             isDarkMode={isDarkMode}
             isRainbowMode={isRainbowMode}
             handleThemeChange={handleThemeChange}
           />
-          <About theme={theme} />
-          <Projects theme={theme} />
-          <Skills theme={theme} />
-          <Testimonials theme={theme} />
-          <Contact theme={theme} />
+          <About />
+          <Projects />
+          <Skills />
+          <Testimonials />
+          <Contact />
 
-          {/* Scroll to top button */}
           {showScrollTop && (
             <motion.button
               initial={{ opacity: 0, scale: 0.5 }}
